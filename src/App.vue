@@ -2,12 +2,12 @@
   <div id="app">
     <div class="container mx-auto px-4">
       <Header />
-      <div class="w-full md:w-5/6 md:mx-auto">
+      <!-- <div class="w-full md:w-5/6 md:mx-auto"> -->
         <FindPartner />
         <Features />
         <FindSection />
         <SubscribeSection />
-      </div>
+      <!-- </div> -->
       <Footer />
     </div>
   </div>
