@@ -24,25 +24,55 @@
 }
 .slide-image {
   height: 700px;
-  background-color: red;
+  background-color: #cecece;
   -webkit-transition: all 0.8s ease;
   transition: all 0.8s ease;
+}
+@media screen and (max-width: 768px) {
+  .hero-section {
+    margin-bottom: 180px;
+  }
+  .slider-wrapper {
+    padding-top: 500px;
+  }
+  .slide-image {
+    height: 500px;
+  }
+}
+@media screen and (max-width: 425px) {
+  .hero-section {
+    margin-bottom: 0px;
+  }
+  .desktop-slider {
+    height: 350px;
+  }
+  .slider-wrapper {
+    padding-top: 0;
+  }
+  .slide-image {
+    height: 350px;
+  }
 }
 </style>
 <template>
   <div class="hero-section">
     <div class="relative slider-wrapper">
-      <div class="desktop-slider absolute top-0 w-full">
+      <div class="desktop-slider relative md:top-0 md:w-full md:absolute">
         <div class="container mx-auto relative">
           <transition name='slide-fade'>
-              <div :key='currentIndex' :style="{'background-image': `url(${currentImg})`}" class="absolute left-0 w-full h-full slide-image bg-cover bg-center bg-no-repeat"></div>
+              <div :key='currentIndex' :style="{'background-image': `url(${currentImg['image']})`}" class="absolute left-0 w-full h-full slide-image bg-cover bg-center bg-no-repeat">
+                <div class="hidden border-t-4 border-siteRed-700 bg-white bg-opacity-95 py-4 px-2 absolute z-10 bottom-0 right-0 mr-56 mb-32 w-1/4 lg:block">
+                  <p class="text-xs text-center text-gray-600 mb-4">{{ currentImg['person']['quote'] }}</p>
+                  <p class="text-xs font-bold text-center text-gray-500">{{ currentImg['person']['name'] }} {{ currentImg['person']['age'] }} | {{ currentImg['person']['city'] }}</p>
+                </div>
+              </div>
           </transition>
         </div>
       </div>
-      <div class="absolute w-full left-0 top-0 z-10">
-        <div class="container pt-20 pb-32 mx-auto">
+      <div class="relative w-full left-0 top-0 z-10 -mt-6 sm:absolute sm:mt-auto">
+        <div class="container mx-auto sm:pt-10 sm:pb-32 sm:mt-0 lg:pt-20">
           <div class="px-4 flex w-full md:w-5/6 md:mx-auto">
-            <div class="flex flex-col bg-siteBlue-900 text-white p-2 mt-12 rounded md:w-1/2 lg:w-1/3">
+            <div class="flex flex-col bg-siteBlue-900 text-white p-2 mt-0 rounded md:mt-12 md:w-1/2 lg:w-1/3">
               <h2 class="text-center text-lg mb-6">Über 1 Millionen Singles warten auf Dich- Online Dating mit unserer Singlebörse.</h2>
               <label class="text-xs font-bold">Kostenlos registrieren</label>
               <input type="text" placeholder="Email" class="px-4 py-3 mt-1 rounded text-center text-gray-700 mb-1 text-sm focus:outline-none">
@@ -53,8 +83,8 @@
           </div>
         </div>
       </div>
-      <div class="absolute z-10 w-full">
-        <div class="container mx-auto -my-10">
+      <div class="relative z-10 w-full sm:absolute">
+        <div class="container mx-auto sm:-my-10">
           <div class="hero-items my-4 px-4 md:w-5/6 md:mx-auto">
             <div class="flex -mx-2">
               <div class="item w-1/3 flex flex-col px-2">
@@ -94,16 +124,36 @@
 </template>
 
 <script>
+import image1 from '../assets/images/woman_slider@2x.png'
+import image2 from '../assets/images/man_slider@2x.png'
+
 export default {
   name: 'Hero',
   data() {
     return {
       show: false,
       images: [
-        "https://cdn.pixabay.com/photo/2015/12/12/15/24/amsterdam-1089646_1280.jpg",
-        "https://cdn.pixabay.com/photo/2016/02/17/23/03/usa-1206240_1280.jpg",
-        "https://cdn.pixabay.com/photo/2015/05/15/14/27/eiffel-tower-768501_1280.jpg",
-        "https://cdn.pixabay.com/photo/2016/12/04/19/30/berlin-cathedral-1882397_1280.jpg"
+        {
+          image: image1,
+          person: {
+            name: 'Steffi',
+            age: '32',
+            quote: '„Mein Partner sollte mit beiden Beinen im Leben stehen.“',
+            city: 'Düsseldorf',
+          }
+        },
+        {
+          image: image2,
+          person: {
+            name: 'Dummy',
+            age: '33',
+            quote: '„Some quot from the dummy person.“',
+            city: 'Düsseldorf',
+          }
+        },
+        // "https://cdn.pixabay.com/photo/2016/02/17/23/03/usa-1206240_1280.jpg",
+        // "https://cdn.pixabay.com/photo/2015/05/15/14/27/eiffel-tower-768501_1280.jpg",
+        // "https://cdn.pixabay.com/photo/2016/12/04/19/30/berlin-cathedral-1882397_1280.jpg"
       ],
       timer: null,
       currentIndex: 0
@@ -118,15 +168,10 @@ export default {
       this.timer = setInterval(this.next, 3000);
     },
 
-    stopSlide: function() {
-      clearTimeout(this.timer);
-      this.timer = null;
-    },
-
     next: function() {
       this.show = !this.show
       this.currentIndex += 1;
-      if(this.currentIndex == this.images.length - 1)
+      if(this.currentIndex == this.images.length)
         this.currentIndex = 0
     },
     prev: function() {
